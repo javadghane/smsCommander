@@ -18,5 +18,4 @@ public class MainActivity extends AppCompatActivity {
         android.util.Log.e("tag", msg);
     }
 
-
 }
