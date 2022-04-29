@@ -16,8 +16,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
+        ImageView img1 = findViewById(R.id.imgGif1);
         ImageView img2 = findViewById(R.id.imgGif2);
+        ImageView img3 = findViewById(R.id.imgGif3);
+        Glide.with(this).asGif().load(R.drawable.off_anim).into(img1);
         Glide.with(this).asGif().load(R.drawable.on_anim).into(img2);
+        Glide.with(this).asGif().load(R.drawable.off_anim).into(img3);
 
     }
 
