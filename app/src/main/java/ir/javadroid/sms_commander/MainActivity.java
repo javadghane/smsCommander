@@ -10,6 +10,10 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 public class MainActivity extends AppCompatActivity {
 
     SentMessageReceiver sent;
@@ -49,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(sent);
         unregisterReceiver(delivered);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReportEdited(EventBus_SMS eventBusSms) {
+        //todo update ui here after recieve sms
+        String stickyEvent = EventBus.getDefault().getStickyEvent(String.class);
+        EventBus.getDefault().removeStickyEvent(stickyEvent);
     }
 
 

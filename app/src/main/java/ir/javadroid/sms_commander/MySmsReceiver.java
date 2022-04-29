@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,6 +27,9 @@ public class MySmsReceiver extends BroadcastReceiver {
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
             //telphone = msg + "  " + phone;
             assert msg != null;
+            EventBus.getDefault().post(new EventBus_SMS());
+            /* <+989157660134> :
+    Status*/
            /* if (msg.contains("17") || msg.contains("18") || msg.contains("13") || msg.contains("14") || msg.contains("15")) {
                 //context.startActivity(new Intent(context,MainActivity.class));
                 Code = Integer.parseInt(msg);

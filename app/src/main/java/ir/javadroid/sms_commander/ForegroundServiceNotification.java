@@ -24,7 +24,7 @@ public class ForegroundServiceNotification extends Service {
         Intent notificationIntent = new Intent(this, MainActivity.class);
 
         PendingIntent pendingIntent;
-        pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_ui_notification);
         builder.setSmallIcon(R.mipmap.ic_launcher).setContentIntent(pendingIntent);
