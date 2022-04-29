@@ -57,7 +57,7 @@
                 android:layout_centerVertical="true"
                 tools:ignore="RelativeOverlap" />
 
-            <pl.droidsonroids.gif.GifTextView
+            <ImageView
                 android:id="@+id/imgGif1"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
@@ -92,7 +92,7 @@
                 app:sb_checked="true"
                 tools:ignore="RelativeOverlap" />
 
-            <pl.droidsonroids.gif.GifTextView
+            <ImageView
                 android:id="@+id/imgGif2"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
@@ -127,7 +127,7 @@
                 android:layout_centerVertical="true"
                 tools:ignore="RelativeOverlap" />
 
-            <pl.droidsonroids.gif.GifTextView
+            <ImageView
                 android:id="@+id/imgGif3"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
