@@ -52,12 +52,12 @@ public class SmsSender extends IntentService {
                 this,
                 IDGenerator.nextValue(),
                 new Intent(SmsSender.INTENT_SENT_MESSAGE),
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
         PendingIntent deliveredPI = PendingIntent.getBroadcast(
                 this,
                 IDGenerator.nextValue(),
                 new Intent(SmsSender.INTENT_DELIVERED_MESSAGE),
-                PendingIntent.FLAG_CANCEL_CURRENT);
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_MUTABLE);
 
 
         if (parts.size() > 1) { //multipart

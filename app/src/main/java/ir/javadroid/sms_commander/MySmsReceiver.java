@@ -40,14 +40,23 @@ public class MySmsReceiver extends BroadcastReceiver {
                 sms.extraDeviceName = deviceId;
                 sms.extraDeviceStatus = deviceStatus;
 
+                boolean deviceStatusBoolean = (deviceStatus.equalsIgnoreCase("on"));
+                if (deviceId.equalsIgnoreCase("1")) {
+                    HelperSharedPreferences.SaveBoolean("device_1", deviceStatusBoolean);
+                } else if (deviceId.equalsIgnoreCase("2")) {
+                    HelperSharedPreferences.SaveBoolean("device_2", deviceStatusBoolean);
+                } else if (deviceId.equalsIgnoreCase("3")) {
+                    HelperSharedPreferences.SaveBoolean("device_3", deviceStatusBoolean);
+                }
+
                 EventBus.getDefault().post(sms);
 
             } else {
                 EventBus_SMS sms = new EventBus_SMS();
                 sms.sender = phone;
                 sms.message = msg;
-                sms.extraDeviceName = "normal";
-                sms.extraDeviceStatus = "normal";
+                sms.extraDeviceName = "";
+                sms.extraDeviceStatus = "";
 
                 EventBus.getDefault().post(sms);
             }

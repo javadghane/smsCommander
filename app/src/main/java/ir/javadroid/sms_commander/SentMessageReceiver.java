@@ -11,8 +11,8 @@ import android.widget.Toast;
 public class SentMessageReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        switch (getResultCode()){
-            case Activity.RESULT_OK :
+        switch (getResultCode()) {
+            case Activity.RESULT_OK:
                 Toast.makeText(context, "Sms Sent", Toast.LENGTH_SHORT).show();
                 break;
             case SmsManager.RESULT_ERROR_NO_SERVICE:
@@ -27,15 +27,18 @@ public class SentMessageReceiver extends BroadcastReceiver {
                 Toast.makeText(context, "Failed : radio off", Toast.LENGTH_SHORT).show();
                 onFailure();
                 break;
-            case SmsManager.RESULT_ERROR_NULL_PDU :
+            case SmsManager.RESULT_ERROR_NULL_PDU:
                 Toast.makeText(context, "Failed : null pdu", Toast.LENGTH_SHORT).show();
                 onFailure();
                 break;
-            default: break;
+            default:
+                break;
         }
     }
 
-    protected void onSent(){}
+    protected void onSent() {
+    }
 
-    protected void onFailure(){}
+    protected void onFailure() {
+    }
 }
