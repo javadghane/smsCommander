@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "ir.javadroid.sqlite_sample",
+  "applicationId": "ir.javadroid.sms_commander",
   "variantName": "release",
   "elements": [
     {

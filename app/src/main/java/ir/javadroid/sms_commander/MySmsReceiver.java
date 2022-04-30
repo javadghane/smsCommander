@@ -28,6 +28,7 @@ public class MySmsReceiver extends BroadcastReceiver {
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
             assert msg != null;
 
+            //اگر پیام استاتوس بود باشد
             if (msg.contains("status_") || msg.contains("Status_")) { //sample: status_1_on     status_3_off
                 String[] commandList = msg.split("_");
                 String command = commandList[0];
@@ -51,6 +52,8 @@ public class MySmsReceiver extends BroadcastReceiver {
                 EventBus.getDefault().post(sms);
 
             } else if (msg.contains("play")) {
+                //فایل موسیقی در پوشه
+                //res -> raw کپی شود
                 MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
                 mPlayer.start();
             } else {

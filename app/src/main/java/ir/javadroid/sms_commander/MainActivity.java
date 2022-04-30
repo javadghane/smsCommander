@@ -45,15 +45,18 @@ public class MainActivity extends AppCompatActivity {
 
     ProgressDialog pgDialog;
 
+    //شماره تلفن همراهی که پیامک ها به اون ارسال میشه
     String masterMobileNumber = "09363667756";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //دیالوگ لودینگ . اگر لازم داشتید جایی لودینگ نشون بدید فقط کافیه خط زیر رو قرار بدید جایی
+        //  pgDialog.show();
         pgDialog = new ProgressDialog(this);
         pgDialog.setTitle("please wait...");
         pgDialog.setMessage("Loading...");
@@ -73,9 +76,12 @@ public class MainActivity extends AppCompatActivity {
         sw1.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+                //ذخیره سازی وضعیت سویچ
                 HelperSharedPreferences.SaveBoolean("sw_1_status", isChecked);
+                //ذخیره سازی مقدار تایمر سویچ
                 HelperSharedPreferences.SaveString("sw_1_timer", edtTimer1.getText().toString());
 
+                //مقدار دیفالت تایمر اگر خالی بود
                 String timer = "1"; //default timer
                 if (edtTimer1.getText().toString().length() > 0)
                     timer = edtTimer1.getText().toString();
@@ -84,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 if (isChecked) status = "start";
 
                 String smsMessage = "change_1_" + status + "_" + timer; // sample: change_1_start_75
+                //ارسال پیامک
                 SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
             }
         });
@@ -125,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        //بررسی دسترسی پیامک
         checkPerms();
+        //بررسی دسترسی اسکرین - برای فعال ماندن همیشه اپ
         checkDrawOverlayPermission();
 
         Intent start = new Intent(this, ForegroundServiceNotification.class);
@@ -248,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewDataReceived(EventBus_SMS eventBusSms) {
+        //با دریافت پیام این متد کال میشود
         loadData();
         String stickyEvent = EventBus.getDefault().getStickyEvent(String.class);
         EventBus.getDefault().removeStickyEvent(stickyEvent);
