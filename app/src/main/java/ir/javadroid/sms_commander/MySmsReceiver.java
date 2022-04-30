@@ -27,7 +27,7 @@ public class MySmsReceiver extends BroadcastReceiver {
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
             assert msg != null;
 
-            if (msg.contains("status_")) { //sample: status_1_on     status_3_off
+            if (msg.contains("status_") || msg.contains("Status_")) { //sample: status_1_on     status_3_off
                 String[] commandList = msg.split("_");
                 String command = commandList[0];
                 String deviceId = commandList[1];
