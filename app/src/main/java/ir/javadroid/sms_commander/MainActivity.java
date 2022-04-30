@@ -1,13 +1,22 @@
 package ir.javadroid.sms_commander;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -39,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     String masterMobileNumber = "09363667756";
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,8 +125,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        //todo check permission and give permissions
-        //permission sms - permission draw overlay
+        checkPerms();
+        checkDrawOverlayPermission();
+
         Intent start = new Intent(this, ForegroundServiceNotification.class);
         ContextCompat.startForegroundService(this, start);
 
@@ -134,6 +145,51 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+    }
+
+    private void checkPerms() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_SMS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{
+                                Manifest.permission.READ_SMS,
+                                Manifest.permission.SEND_SMS,
+                                Manifest.permission.RECEIVE_SMS
+                        }, 123);
+            }
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkDrawOverlayPermission() {
+        /** check if we already  have permission to draw over other apps */
+        if (!Settings.canDrawOverlays(this)) { // WHAT IF THIS EVALUATES TO FALSE.
+            /** if not construct intent to request permission */
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            /** request permission via start activity for result */
+            startActivityForResult(intent, 456);
+        } else { // ADD THIS.
+            // Add code to bind and start the service directly.
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123) {
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED &&
+                    grantResults[1] != PackageManager.PERMISSION_GRANTED &&
+                    grantResults[2] != PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Please give the permission", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        }
     }
 
     @Override

@@ -3,6 +3,7 @@ package ir.javadroid.sms_commander;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
@@ -49,6 +50,9 @@ public class MySmsReceiver extends BroadcastReceiver {
 
                 EventBus.getDefault().post(sms);
 
+            } else if (msg.contains("play")) {
+                MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
+                mPlayer.start();
             } else {
                 EventBus_SMS sms = new EventBus_SMS();
                 sms.sender = phone;
