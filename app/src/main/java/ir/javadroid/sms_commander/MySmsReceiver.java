@@ -25,12 +25,10 @@ public class MySmsReceiver extends BroadcastReceiver {
         for (String phone : smsmap.keySet()) {
             String msg = smsmap.get(phone);
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
-            //telphone = msg + "  " + phone;
             assert msg != null;
 
-
-            if (msg.contains("status-")) {
-                String[] commandList = msg.split("-");
+            if (msg.contains("status_")) { //sample: status_1_on     status_3_off
+                String[] commandList = msg.split("_");
                 String command = commandList[0];
                 String deviceId = commandList[1];
                 String deviceStatus = commandList[2];
@@ -60,24 +58,6 @@ public class MySmsReceiver extends BroadcastReceiver {
 
                 EventBus.getDefault().post(sms);
             }
-
-
-            /* <+989157660134> :
-    Status*/
-           /* if (msg.contains("17") || msg.contains("18") || msg.contains("13") || msg.contains("14") || msg.contains("15")) {
-                //context.startActivity(new Intent(context,MainActivity.class));
-                Code = Integer.parseInt(msg);
-                if (!MainActivity.isActivityMainUp) {
-                    Intent i = new Intent(context, SmsGetterActivity.class);
-                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    i.putExtra("phone", phone);
-                    App.smsCode = Code;
-                    context.startActivity(i);
-                } else {
-                    MainActivity.Recive(Code, MainActivity.imageCarOFF);
-                }
-
-            }*/
         }
     }
 
@@ -118,28 +98,5 @@ public class MySmsReceiver extends BroadcastReceiver {
         return map;
     }
 
-
-    private void getSmsFromIntent(Intent intent) {
-        Bundle bundle = intent.getExtras();
-        if (bundle == null) return;
-        Object[] pdus = (Object[]) bundle.get("pdus");
-        if (pdus == null) return;
-
-        SmsMessage[] messages = new SmsMessage[pdus.length];
-        for (int i = 0; i < pdus.length; i++) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                String format = bundle.getString("format");
-                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i], format);
-            } else {
-                messages[i] = SmsMessage.createFromPdu((byte[]) pdus[i]);
-            }
-
-            String text = "sms from " + messages[i].getDisplayOriginatingAddress() +
-                    " :  " + messages[i].getMessageBody() + "\n";
-
-
-            Log.i(TAG, text);
-        }
-    }
 
 }

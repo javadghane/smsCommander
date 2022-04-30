@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 String status = "stop";
                 if (isChecked) status = "start";
 
-                String smsMessage = "change_2_" + status + "_" + timer; // sample: change_1_start_75
+                String smsMessage = "change_3_" + status + "_" + timer; // sample: change_1_start_75
                 SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
             }
         });
