@@ -27,7 +27,32 @@ public class MySmsReceiver extends BroadcastReceiver {
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
             //telphone = msg + "  " + phone;
             assert msg != null;
-            EventBus.getDefault().post(new EventBus_SMS());
+
+
+            if (msg.contains("status-")) {
+                String[] commandList = msg.split("-");
+                String command = commandList[0];
+                String deviceId = commandList[1];
+                String deviceStatus = commandList[2];
+                EventBus_SMS sms = new EventBus_SMS();
+                sms.sender = phone;
+                sms.message = msg;
+                sms.extraDeviceName = deviceId;
+                sms.extraDeviceStatus = deviceStatus;
+
+                EventBus.getDefault().post(sms);
+
+            } else {
+                EventBus_SMS sms = new EventBus_SMS();
+                sms.sender = phone;
+                sms.message = msg;
+                sms.extraDeviceName = "normal";
+                sms.extraDeviceStatus = "normal";
+
+                EventBus.getDefault().post(sms);
+            }
+
+
             /* <+989157660134> :
     Status*/
            /* if (msg.contains("17") || msg.contains("18") || msg.contains("13") || msg.contains("14") || msg.contains("15")) {
