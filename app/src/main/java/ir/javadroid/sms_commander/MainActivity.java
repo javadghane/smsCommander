@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -76,58 +77,21 @@ public class MainActivity extends AppCompatActivity {
         sw1.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                //ذخیره سازی وضعیت سویچ
-                HelperSharedPreferences.SaveBoolean("sw_1_status", isChecked);
-                //ذخیره سازی مقدار تایمر سویچ
-                HelperSharedPreferences.SaveString("sw_1_timer", edtTimer1.getText().toString());
-
-                //مقدار دیفالت تایمر اگر خالی بود
-                String timer = "1"; //default timer
-                if (edtTimer1.getText().toString().length() > 0)
-                    timer = edtTimer1.getText().toString();
-
-                String status = "stop";
-                if (isChecked) status = "start";
-
-                String smsMessage = "change_1_" + status + "_" + timer; // sample: change_1_start_75
-                //ارسال پیامک
-                SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                changeStatus(isChecked, "1");
             }
         });
 
         sw2.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                HelperSharedPreferences.SaveBoolean("sw_2_status", isChecked);
-                HelperSharedPreferences.SaveString("sw_2_timer", edtTimer2.getText().toString());
-
-                String timer = "1"; //default timer
-                if (edtTimer2.getText().toString().length() > 0)
-                    timer = edtTimer2.getText().toString();
-
-                String status = "stop";
-                if (isChecked) status = "start";
-
-                String smsMessage = "change_2_" + status + "_" + timer; // sample: change_1_start_75
-                SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                changeStatus(isChecked, "2");
             }
         });
 
         sw3.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                HelperSharedPreferences.SaveBoolean("sw_3_status", isChecked);
-                HelperSharedPreferences.SaveString("sw_3_timer", edtTimer3.getText().toString());
-
-                String timer = "1"; //default timer
-                if (edtTimer3.getText().toString().length() > 0)
-                    timer = edtTimer3.getText().toString();
-
-                String status = "stop";
-                if (isChecked) status = "start";
-
-                String smsMessage = "change_3_" + status + "_" + timer; // sample: change_1_start_75
-                SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                changeStatus(isChecked, "3");
             }
         });
 
@@ -144,6 +108,34 @@ public class MainActivity extends AppCompatActivity {
         delivered = new DeliveredMessageReceiver();
         registerReceiver(sent, new IntentFilter(SmsSender.INTENT_SENT_MESSAGE));
         registerReceiver(delivered, new IntentFilter(SmsSender.INTENT_DELIVERED_MESSAGE));
+    }
+
+    private void changeStatus(boolean isChecked, String switchNumber) {
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Change status")
+                .setMessage("Do you really want to change?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+
+                    //ذخیره سازی وضعیت سویچ
+                    HelperSharedPreferences.SaveBoolean("sw_" + switchNumber + "_status", isChecked);
+                    //ذخیره سازی مقدار تایمر سویچ
+                    HelperSharedPreferences.SaveString("sw_" + switchNumber + "_timer", edtTimer1.getText().toString());
+
+                    //مقدار دیفالت تایمر اگر خالی بود
+                    String timer = "1"; //default timer
+                    if (edtTimer1.getText().toString().length() > 0)
+                        timer = edtTimer1.getText().toString();
+
+                    String status = "stop";
+                    if (isChecked) status = "start";
+
+                    String smsMessage = "change_" + switchNumber + "_" + status + "_" + timer; // sample: change_1_start_75
+                    //ارسال پیامک
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+
+                })
+                .setNegativeButton(android.R.string.no, null).show();
     }
 
     void log(String msg) {
