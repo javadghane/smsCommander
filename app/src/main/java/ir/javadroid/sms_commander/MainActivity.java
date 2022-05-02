@@ -2,12 +2,15 @@ package ir.javadroid.sms_commander;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     //شماره تلفن همراهی که پیامک ها به اون ارسال میشه
     String masterMobileNumber = "09363667756";
 
+    boolean canCheckSwitch = true;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -77,21 +82,24 @@ public class MainActivity extends AppCompatActivity {
         sw1.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                changeStatus(isChecked, "1");
+                if (canCheckSwitch)
+                    changeStatus(isChecked, "1", view);
             }
         });
 
         sw2.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                changeStatus(isChecked, "2");
+                if (canCheckSwitch)
+                    changeStatus(isChecked, "2", view);
             }
         });
 
         sw3.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-                changeStatus(isChecked, "3");
+                if (canCheckSwitch)
+                    changeStatus(isChecked, "3", view);
             }
         });
 
@@ -110,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         registerReceiver(delivered, new IntentFilter(SmsSender.INTENT_DELIVERED_MESSAGE));
     }
 
-    private void changeStatus(boolean isChecked, String switchNumber) {
+    private void changeStatus(boolean isChecked, String switchNumber, SwitchButton switchItem) {
         new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Change status")
                 .setMessage("Do you really want to change?")
@@ -135,7 +143,19 @@ public class MainActivity extends AppCompatActivity {
                     SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
                 })
-                .setNegativeButton(android.R.string.no, null).show();
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        canCheckSwitch=false;
+                        switchItem.setChecked(false);
+                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                canCheckSwitch=true;
+                            }
+                        },500);
+                    }
+                }).show();
     }
 
     void log(String msg) {
