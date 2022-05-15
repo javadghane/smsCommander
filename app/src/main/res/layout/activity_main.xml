@@ -22,9 +22,9 @@
         android:id="@+id/phoneNm"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="09363667756"
+        android:text="07501821314"
         android:textColor="@android:color/white" />
-<!--07501821314-->
+<!---->
 
     <ImageView
         android:id="@+id/imgTop"

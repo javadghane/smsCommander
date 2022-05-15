@@ -259,10 +259,10 @@ public class MainActivity extends AppCompatActivity {
                     //  smsMessage = "R" + switchNumber +  status + timer; // sample: change_1_start_75
                     masterMobileNumber = edtphonNm.getText().toString();
 
-                    //todo ********************************
-                    edtphonNm.setText("sms" + smsMessage);
-                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-                    //todo ********************************
+
+
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+
 
 
                     checkingTimers();
@@ -484,7 +484,6 @@ public class MainActivity extends AppCompatActivity {
         switch (timerNumber) {
             case 1:
                 //اینجا میتوان پس از پایان تایمر 1 اعمال مورد نیاز را اجرا کرد.
-                edtphonNm.setText("sms" + "timer1Done");
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
                 tvTimerHour1.setText("00:00:00");
@@ -493,7 +492,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 //اینجا میتوان پس از پایان تایمر 2 اعمال مورد نیاز را اجرا کرد.
-                edtphonNm.setText("sms" + "timer2Done");
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
                 tvTimerHour2.setText("00:00:00");
@@ -502,7 +500,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 3:
                 //اینجا میتوان پس از پایان تایمر 3 اعمال مورد نیاز را اجرا کرد.
-                edtphonNm.setText("sms" + "timer3Done");
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
                 tvTimerHour3.setText("00:00:00");
