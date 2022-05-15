@@ -10,7 +10,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -38,14 +37,14 @@ import org.greenrobot.eventbus.ThreadMode;
 
 public class MainActivity extends AppCompatActivity {
     /////////for time
-    TextView tshow1;
-    TextView tshow2;
-    TextView tshow3;
-    TextView tTimerS1;
-    TextView tTimerS2;
-    TextView tTimerS3;
+    TextView tvTimerHourCountDown1;
+    TextView tvTimerHourCountDown2;
+    TextView tvTimerHourCountDown3;
+    TextView tvTimerHour1;
+    TextView tvTimerHour2;
+    TextView tvTimerHour3;
     //////////////
-    long getTime;
+    //long getTime;
 
     private static final long START_TIME_IN_MILLIS = 600000;
 
@@ -73,25 +72,24 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog pgDialog;
 
     //شماره تلفن همراهی که پیامک ها به اون ارسال میشه
-    String masterMobileNumber = "09363667756"; //07502435057
+    String masterMobileNumber = "07502435057"; //07502435057
 
     boolean canCheckSwitch = true;
     private Object timers;
-
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//////////////////////for time
-        tshow1 = (TextView) findViewById(R.id.t_v_timeShow1);
-        tshow2 = (TextView) findViewById(R.id.t_v_timeShow2);
-        tshow3 = (TextView) findViewById(R.id.t_v_timeShow3);
+        //////////////////////for time
+        tvTimerHourCountDown1 = (TextView) findViewById(R.id.t_v_timeShow1);
+        tvTimerHourCountDown2 = (TextView) findViewById(R.id.t_v_timeShow2);
+        tvTimerHourCountDown3 = (TextView) findViewById(R.id.t_v_timeShow3);
         ///
-        tTimerS1 = (TextView) findViewById(R.id.tTimerS1);
-        tTimerS2 = (TextView) findViewById(R.id.tTimerS2);
-        tTimerS3 = (TextView) findViewById(R.id.tTimerS3);
+        tvTimerHour1 = (TextView) findViewById(R.id.tTimerS1);
+        tvTimerHour2 = (TextView) findViewById(R.id.tTimerS2);
+        tvTimerHour3 = (TextView) findViewById(R.id.tTimerS3);
 
 
         ////////////
@@ -118,10 +116,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    if (edtTimer1.getText().toString().length() > 0) {
-                        //int number = Integer.parseInt(edtTimer1.getText().toString());
-                        edtTimer1.setText(String.format("%03d", edtTimer1.getText().toString()));
-                    }
+                    setTvNumberStyle(edtTimer1);
+                }
+            }
+        });
+        edtTimer2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    setTvNumberStyle(edtTimer2);
+                }
+            }
+        });
+        edtTimer3.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    setTvNumberStyle(edtTimer3);
                 }
             }
         });
@@ -191,19 +202,43 @@ public class MainActivity extends AppCompatActivity {
                         timer = timer1;
                         if (edtTimer1.getText().toString().length() > 0)
                             timer = edtTimer1.getText().toString();
+                        setHourOfTimer(timer, tvTimerHour1);
+
+                        //اگر برابر 0 شود متد پس از اجرای پایان اجرا نمیشود . اگر یک باشد اجرا میشود
+                        long endTime = 1;
+                        if (isChecked) {
+                            endTime = System.currentTimeMillis() + (Integer.parseInt(timer) * 60 * 1000);
+                        }
+                        HelperSharedPreferences.SaveString("timer1_end", endTime + "");
+
                     }
                     if (switchNumber.equals("2")) {
                         timer = timer2;
                         if (edtTimer2.getText().toString().length() > 0)
                             timer = edtTimer2.getText().toString();
+                        setHourOfTimer(timer, tvTimerHour2);
+
+                        //اگر برابر 0 شود متد پس از اجرای پایان اجرا نمیشود . اگر یک باشد اجرا میشود
+                        long endTime = 1;
+                        if (isChecked) {
+                            endTime = System.currentTimeMillis() + (Integer.parseInt(timer) * 60 * 1000);
+                        }
+                        HelperSharedPreferences.SaveString("timer2_end", endTime + "");
                     }
                     if (switchNumber.equals("3")) {
-                        timer.equals(timer3);
+                        timer = timer3;
                         if (edtTimer3.getText().toString().length() > 0)
                             timer = edtTimer3.getText().toString();
+                        setHourOfTimer(timer, tvTimerHour3);
+
+                        //اگر برابر 0 شود متد پس از اجرای پایان اجرا نمیشود . اگر یک باشد اجرا میشود
+                        long endTime = 1;
+                        if (isChecked) {
+                            endTime = System.currentTimeMillis() + (Integer.parseInt(timer) * 60 * 1000);
+                        }
+                        HelperSharedPreferences.SaveString("timer3_end", endTime + "");
                     }
                     ///
-
 
                     //ذخیره سازی وضعیت سویچ  Ali
                     HelperSharedPreferences.SaveBoolean("sw_" + switchNumber + "_status", isChecked);
@@ -223,23 +258,14 @@ public class MainActivity extends AppCompatActivity {
                     // String smsMessage = "change_" + switchNumber + "_" + status + "$" + timer; // sample: change_1_start_75
                     //  smsMessage = "R" + switchNumber +  status + timer; // sample: change_1_start_75
                     masterMobileNumber = edtphonNm.getText().toString();
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-///////////////////////////////time cont down
-                    tshow1 = (TextView) findViewById(R.id.t_v_timeShow1);
-                    getTime = Integer.parseInt(status.toString()) * 60 * 1000 + 1000;
-                    tshow1.setText("00:00:00");
-                    cancelTimer();
-                    startTimer(getTime);
-                    tTimerS1.setText("00:00:00");
-                    if (status.equals("000")) {
-                        cancelTimer();
-                        tTimerS1.setText("00:00:00");
-                    }
+
+                    //todo ********************************
+                    edtphonNm.setText("sms" + smsMessage);
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    //todo ********************************
 
 
-//////////////////////for restarting time counter
-
-
+                    checkingTimers();
                 })
                 .setNegativeButton("نه خير", new DialogInterface.OnClickListener() {
                     @Override
@@ -252,9 +278,19 @@ public class MainActivity extends AppCompatActivity {
                                 canCheckSwitch = true;
                             }
                         }, 500);
+
+
                     }
                 }).show();
 
+    }
+
+
+    void setTvNumberStyle(TextView tv) {
+        if (tv.getText().toString().length() > 0) {
+            int number = Integer.parseInt(tv.getText().toString());
+            tv.setText(String.format("%03d", number) + "");
+        }
     }
 
     void log(String msg) {
@@ -330,7 +366,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        checkingTimers();
         loadData();
     }
 
@@ -365,6 +401,9 @@ public class MainActivity extends AppCompatActivity {
         edtTimer1.setText(HelperSharedPreferences.LoadString("sw_1_timer", ""));
         edtTimer2.setText(HelperSharedPreferences.LoadString("sw_2_timer", ""));
         edtTimer3.setText(HelperSharedPreferences.LoadString("sw_3_timer", ""));
+        setTvNumberStyle(edtTimer1);
+        setTvNumberStyle(edtTimer2);
+        setTvNumberStyle(edtTimer3);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -376,12 +415,140 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void checkingTimers() {
+        long now = System.currentTimeMillis();
+
+        //---------------- timer1
+        long timer1_end = Long.parseLong(HelperSharedPreferences.LoadString("timer1_end", "0"));
+        if (timer1_end > now) {
+            long diff = (now - timer1_end) / 1000;
+            setCountTimerText(diff, tvTimerHourCountDown1);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkingTimers();
+                }
+            }, 1000);
+        } else {
+            if (timer1_end > 0) {
+                onFinishTimer(1);
+            } else {
+                //timer not started yet
+            }
+        }
+
+
+        //---------------- timer2
+        long timer2_end = Long.parseLong(HelperSharedPreferences.LoadString("timer2_end", "0"));
+        if (timer2_end > now) {
+            long diff = (now - timer2_end) / 1000;
+            setCountTimerText(diff, tvTimerHourCountDown2);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkingTimers();
+                }
+            }, 1000);
+        } else {
+            if (timer2_end > 0) {
+                onFinishTimer(2);
+            } else {
+                //timer not started yet
+            }
+        }
+
+        //---------------- timer3
+        long timer3_end = Long.parseLong(HelperSharedPreferences.LoadString("timer3_end", "0"));
+        if (timer3_end > now) {
+            long diff = (now - timer3_end) / 1000;
+            setCountTimerText(diff, tvTimerHourCountDown3);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkingTimers();
+                }
+            }, 1000);
+        } else {
+            if (timer3_end > 0) {
+                onFinishTimer(3);
+            } else {
+                //timer not started yet
+            }
+        }
+
+    }
+
+
+    //متد پس از اجرای پایان
+    public void onFinishTimer(int timerNumber) {
+        switch (timerNumber) {
+            case 1:
+                //اینجا میتوان پس از پایان تایمر 1 اعمال مورد نیاز را اجرا کرد.
+                edtphonNm.setText("sms" + "timer1Done");
+                //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+
+                tvTimerHour1.setText("00:00:00");
+                tvTimerHourCountDown1.setText("00:00:00");
+                HelperSharedPreferences.SaveString("timer1_end", "0");
+                break;
+            case 2:
+                //اینجا میتوان پس از پایان تایمر 2 اعمال مورد نیاز را اجرا کرد.
+                edtphonNm.setText("sms" + "timer2Done");
+                //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+
+                tvTimerHour2.setText("00:00:00");
+                tvTimerHourCountDown2.setText("00:00:00");
+                HelperSharedPreferences.SaveString("timer2_end", "0");
+                break;
+            case 3:
+                //اینجا میتوان پس از پایان تایمر 3 اعمال مورد نیاز را اجرا کرد.
+                edtphonNm.setText("sms" + "timer3Done");
+                //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+
+                tvTimerHour3.setText("00:00:00");
+                tvTimerHourCountDown3.setText("00:00:00");
+                HelperSharedPreferences.SaveString("timer3_end", "0");
+                break;
+        }
+    }
+
+    public void setCountTimerText(long seconds, TextView counterTv) {
+        if (seconds == 0) {
+            counterTv.setText("00:00:00");
+        } else {
+            int hours = (int) (seconds / (60 * 60));
+            int tempMint = (int) (seconds - (hours * 60 * 60));
+            int minutes =tempMint / 60;
+            seconds = tempMint - (minutes * 60);
+            counterTv.setText(String.format("%02d", Math.abs(hours))
+                    + ":" + String.format("%02d", Math.abs(minutes))
+                    + ":" + String.format("%02d", Math.abs(seconds)));
+        }
+    }
+
+    public void setHourOfTimer(String min, TextView tvThatShowTime) {
+        if (min.equalsIgnoreCase("0")) {
+            tvThatShowTime.setText("00:00:00");
+        } else {
+            int seconds = Integer.parseInt(min) * 60;
+            int hours = seconds / (60 * 60);
+            int tempMint = (seconds - (hours * 60 * 60));
+            int minutes = tempMint / 60;
+            seconds = tempMint - (minutes * 60);
+
+            //   tshow1.setText("TIME : " + String.format("%02d", hours)
+            tvThatShowTime.setText(String.format("%02d", hours)
+                    + ":" + String.format("%02d", minutes)
+                    + ":" + String.format("%02d", seconds));
+        }
+
+    }
     //for timer
     //Declare timer
-    CountDownTimer cTimer = null;
-    int check = 1;
+    // CountDownTimer cTimer = null;
+    //int check = 1;
 
-    //start timer function
+   /* //start timer function
     void startTimer(long timeLeft) {
         cTimer = new CountDownTimer(timeLeft, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -417,6 +584,6 @@ public class MainActivity extends AppCompatActivity {
     void cancelTimer() {
         if (cTimer != null)
             cTimer.cancel();
-    }
+    }*/
 }
 

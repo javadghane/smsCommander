@@ -22,9 +22,9 @@
         android:id="@+id/phoneNm"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="07501821314"
+        android:text="09363667756"
         android:textColor="@android:color/white" />
-
+<!--07501821314-->
 
     <ImageView
         android:id="@+id/imgTop"
@@ -82,7 +82,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="48dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -94,7 +94,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="14dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -159,7 +159,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="48dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -171,7 +171,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="14dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -238,7 +238,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="48dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
@@ -250,7 +250,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="14dp"
-                    android:text="0000"
+                    android:text="00:00:00"
                     android:textColor="@android:color/white"
                     android:textSize="20dp"
                     android:textStyle="normal" />
