@@ -1,5 +1,6 @@
 package ir.javadroid.sms_commander;
 ///
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -13,6 +14,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,13 +44,12 @@ public class MainActivity extends AppCompatActivity {
     TextView tTimerS1;
     TextView tTimerS2;
     TextView tTimerS3;
-   //////////////
-     long getTime;
+    //////////////
+    long getTime;
 
     private static final long START_TIME_IN_MILLIS = 600000;
 
     private TextView mTextViewCountDown;
-
 
 
     ///////
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressDialog pgDialog;
 
     //شماره تلفن همراهی که پیامک ها به اون ارسال میشه
-    String masterMobileNumber = "07502435057";
+    String masterMobileNumber = "09363667756"; //07502435057
 
     boolean canCheckSwitch = true;
     private Object timers;
@@ -92,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         tTimerS2 = (TextView) findViewById(R.id.tTimerS2);
         tTimerS3 = (TextView) findViewById(R.id.tTimerS3);
 
+
         ////////////
         //دیالوگ لودینگ . اگر لازم داشتید جایی لودینگ نشون بدید فقط کافیه خط زیر رو قرار بدید جایی
         // pgDialog.show();
@@ -110,6 +112,19 @@ public class MainActivity extends AppCompatActivity {
         edtTimer2 = findViewById(R.id.edtTimer2);
         edtTimer3 = findViewById(R.id.edtTimer3);
         edtphonNm = findViewById(R.id.phoneNm);
+
+
+        edtTimer1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    if (edtTimer1.getText().toString().length() > 0) {
+                        //int number = Integer.parseInt(edtTimer1.getText().toString());
+                        edtTimer1.setText(String.format("%03d", edtTimer1.getText().toString()));
+                    }
+                }
+            }
+        });
 
 
         sw1.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
@@ -211,20 +226,18 @@ public class MainActivity extends AppCompatActivity {
                     SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 ///////////////////////////////time cont down
                     tshow1 = (TextView) findViewById(R.id.t_v_timeShow1);
-                    getTime = Integer.parseInt(status.toString()) * 60 * 1000+1000;
+                    getTime = Integer.parseInt(status.toString()) * 60 * 1000 + 1000;
                     tshow1.setText("00:00:00");
                     cancelTimer();
                     startTimer(getTime);
-tTimerS1.setText("00:00:00");
-                    if(status.equals("000")) {
+                    tTimerS1.setText("00:00:00");
+                    if (status.equals("000")) {
                         cancelTimer();
                         tTimerS1.setText("00:00:00");
                     }
 
 
-
 //////////////////////for restarting time counter
-
 
 
                 })
@@ -363,36 +376,36 @@ tTimerS1.setText("00:00:00");
     }
 
 
-   
+    //for timer
+    //Declare timer
+    CountDownTimer cTimer = null;
+    int check = 1;
 
-   //for timer
-   //Declare timer
-   CountDownTimer cTimer = null;
-   int check = 1;
     //start timer function
     void startTimer(long timeLeft) {
         cTimer = new CountDownTimer(timeLeft, 1000) {
             public void onTick(long millisUntilFinished) {
 
-                    int seconds = (int) (millisUntilFinished / 1000);
+                int seconds = (int) (millisUntilFinished / 1000);
 
-                    int hours = seconds / (60 * 60);
-                    int tempMint = (seconds - (hours * 60 * 60));
-                    int minutes = tempMint / 60;
-                    seconds = tempMint - (minutes * 60);
+                int hours = seconds / (60 * 60);
+                int tempMint = (seconds - (hours * 60 * 60));
+                int minutes = tempMint / 60;
+                seconds = tempMint - (minutes * 60);
 
-                 //   tshow1.setText("TIME : " + String.format("%02d", hours)
+                //   tshow1.setText("TIME : " + String.format("%02d", hours)
                 tshow1.setText(String.format("%02d", hours)
                         + ":" + String.format("%02d", minutes)
                         + ":" + String.format("%02d", seconds));
-               
-                if(check == 1){
-                   tTimerS1.setText(tshow1.getText());
+
+                if (check == 1) {
+                    tTimerS1.setText(tshow1.getText());
                     check = 0;
                 }
                 //////
 
             }
+
             public void onFinish() {
             }
         };
@@ -402,7 +415,7 @@ tTimerS1.setText("00:00:00");
 
     //cancel timer
     void cancelTimer() {
-        if(cTimer!=null)
+        if (cTimer != null)
             cTimer.cancel();
     }
 }

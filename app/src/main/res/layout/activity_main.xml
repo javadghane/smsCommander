@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/black"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
@@ -24,7 +24,6 @@
         android:layout_height="40dp"
         android:text="07501821314"
         android:textColor="@android:color/white" />
-
 
 
     <ImageView
@@ -126,6 +125,7 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
+
             <RelativeLayout
                 android:layout_width="100dp"
                 android:layout_height="152dp"
@@ -178,7 +178,6 @@
             </RelativeLayout>
 
 
-
             <com.suke.widget.SwitchButton
                 android:id="@+id/sw2"
                 android:layout_width="70dp"
@@ -205,6 +204,7 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             tools:ignore="UselessParent">
+
             <RelativeLayout
                 android:layout_width="100dp"
                 android:layout_height="152dp"
