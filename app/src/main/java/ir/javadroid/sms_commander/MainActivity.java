@@ -249,18 +249,21 @@ public class MainActivity extends AppCompatActivity {
                     //*RLY#1#200#
                     if (isChecked)
                         status = timer;
-                    smsMessage = "*RLY#" + switchNumber + "#" + status + "#"; // sample: change_1_start_75
+
+                    int numberFormatted = Integer.parseInt(status);
+                    smsMessage = "*RLY#" + switchNumber + "#" + String.format("%03d", numberFormatted) + "#"; // sample: change_1_start_75
+
 
                     // if (status.equals("stop"));
 
-                    //  smsMessage = "*RLY#" + switchNumber  +"#"+   timer +"#" ; // sample: change_1_start_75
+                    smsMessage = "*RLY#" + switchNumber + "#" + timer + "#"; // sample: change_1_start_75
 
                     // String smsMessage = "change_" + switchNumber + "_" + status + "$" + timer; // sample: change_1_start_75
                     //  smsMessage = "R" + switchNumber +  status + timer; // sample: change_1_start_75
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -465,6 +468,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 1000);
         }
+
+
+        setHourOfTimer(HelperSharedPreferences.LoadString("sw_1_timer", "0"), tvTimerHour1);
+        setHourOfTimer(HelperSharedPreferences.LoadString("sw_2_timer", "0"), tvTimerHour2);
+        setHourOfTimer(HelperSharedPreferences.LoadString("sw_3_timer", "0"), tvTimerHour3);
     }
 
 
