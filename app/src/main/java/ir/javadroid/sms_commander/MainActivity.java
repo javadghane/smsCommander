@@ -260,9 +260,7 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -423,12 +421,6 @@ public class MainActivity extends AppCompatActivity {
         if (timer1_end > now) {
             long diff = (now - timer1_end) / 1000;
             setCountTimerText(diff, tvTimerHourCountDown1);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkingTimers();
-                }
-            }, 1000);
         } else {
             if (timer1_end > 0) {
                 onFinishTimer(1);
@@ -443,12 +435,6 @@ public class MainActivity extends AppCompatActivity {
         if (timer2_end > now) {
             long diff = (now - timer2_end) / 1000;
             setCountTimerText(diff, tvTimerHourCountDown2);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkingTimers();
-                }
-            }, 1000);
         } else {
             if (timer2_end > 0) {
                 onFinishTimer(2);
@@ -462,12 +448,6 @@ public class MainActivity extends AppCompatActivity {
         if (timer3_end > now) {
             long diff = (now - timer3_end) / 1000;
             setCountTimerText(diff, tvTimerHourCountDown3);
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkingTimers();
-                }
-            }, 1000);
         } else {
             if (timer3_end > 0) {
                 onFinishTimer(3);
@@ -476,6 +456,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+
+        if (timer1_end > now || timer2_end > now || timer3_end > now) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkingTimers();
+                }
+            }, 1000);
+        }
     }
 
 
@@ -515,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             int hours = (int) (seconds / (60 * 60));
             int tempMint = (int) (seconds - (hours * 60 * 60));
-            int minutes =tempMint / 60;
+            int minutes = tempMint / 60;
             seconds = tempMint - (minutes * 60);
             counterTv.setText(String.format("%02d", Math.abs(hours))
                     + ":" + String.format("%02d", Math.abs(minutes))

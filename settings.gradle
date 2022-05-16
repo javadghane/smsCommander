@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "SmsCommander"
+rootProject.name = "SmsCommanderAlarm"
 include ':app'
