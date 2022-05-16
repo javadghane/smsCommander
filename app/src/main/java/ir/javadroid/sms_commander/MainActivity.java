@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
