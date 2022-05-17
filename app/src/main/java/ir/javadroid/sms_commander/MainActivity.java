@@ -256,14 +256,14 @@ public class MainActivity extends AppCompatActivity {
 
                     // if (status.equals("stop"));
 
-                    smsMessage = "*RLY#" + switchNumber + "#" + timer + "#"; // sample: change_1_start_75
+                    //smsMessage = "*RLY#" + switchNumber + "#" + timer + "#"; // sample: change_1_start_75
 
                     // String smsMessage = "change_" + switchNumber + "_" + status + "$" + timer; // sample: change_1_start_75
                     //  smsMessage = "R" + switchNumber +  status + timer; // sample: change_1_start_75
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
