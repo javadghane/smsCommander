@@ -33,6 +33,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Locale;
+
 ///
 
 public class MainActivity extends AppCompatActivity {
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -391,13 +393,7 @@ public class MainActivity extends AppCompatActivity {
         else
             Glide.with(this).asGif().load(R.drawable.off_anim).into(img3);
 
-        boolean statusSw1 = HelperSharedPreferences.LoadBoolean("sw_1_status", false);
-        boolean statusSw2 = HelperSharedPreferences.LoadBoolean("sw_2_status", false);
-        boolean statusSw3 = HelperSharedPreferences.LoadBoolean("sw_3_status", false);
-
-        sw1.setChecked(statusSw1);
-        sw2.setChecked(statusSw2);
-        sw3.setChecked(statusSw3);
+        setSwitchStatus();
 
         edtTimer1.setText(HelperSharedPreferences.LoadString("sw_1_timer", ""));
         edtTimer2.setText(HelperSharedPreferences.LoadString("sw_2_timer", ""));
@@ -407,12 +403,81 @@ public class MainActivity extends AppCompatActivity {
         setTvNumberStyle(edtTimer3);
     }
 
+    public void setSwitchStatus() {
+        boolean statusSw1 = HelperSharedPreferences.LoadBoolean("sw_1_status", false);
+        boolean statusSw2 = HelperSharedPreferences.LoadBoolean("sw_2_status", false);
+        boolean statusSw3 = HelperSharedPreferences.LoadBoolean("sw_3_status", false);
+
+        sw1.setChecked(statusSw1);
+        sw2.setChecked(statusSw2);
+        sw3.setChecked(statusSw3);
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onNewDataReceived(EventBus_SMS eventBusSms) {
         //با دریافت پیام این متد کال میشود
         loadData();
+        if (eventBusSms.message.toLowerCase(Locale.ROOT).contains("ltime")) { //ltime1#030
+            String timerName = eventBusSms.message.split("#")[0];
+            int timerValue = Integer.parseInt(eventBusSms.message.split("#")[1]);
+            if (timerName.equalsIgnoreCase("ltime1")) {
+                HelperSharedPreferences.SaveString("timer1_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+
+                //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
+              /*  canCheckSwitch = false;
+                if(timerValue>0){
+                    HelperSharedPreferences.SaveBoolean("sw_1_status", true);
+                }else{
+                    HelperSharedPreferences.SaveBoolean("sw_1_status", false);
+                }
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);*/
+
+            } else if (timerName.equalsIgnoreCase("ltime2")) {
+                HelperSharedPreferences.SaveString("timer2_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+                //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
+              /*  canCheckSwitch = false;
+                if(timerValue>0){
+                    HelperSharedPreferences.SaveBoolean("sw_2_status", true);
+                }else{
+                    HelperSharedPreferences.SaveBoolean("sw_2_status", false);
+                }
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);*/
+            } else if (timerName.equalsIgnoreCase("ltime3")) {
+
+                HelperSharedPreferences.SaveString("timer3_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+                //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
+                 /*  canCheckSwitch = false;
+                if(timerValue>0){
+                    HelperSharedPreferences.SaveBoolean("sw_3_status", true);
+                }else{
+                    HelperSharedPreferences.SaveBoolean("sw_3_status", false);
+                }
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);*/
+            }
+            checkingTimers();
+        }
         String stickyEvent = EventBus.getDefault().getStickyEvent(String.class);
         EventBus.getDefault().removeStickyEvent(stickyEvent);
+
+
     }
 
 
@@ -482,7 +547,15 @@ public class MainActivity extends AppCompatActivity {
             case 1:
                 //اینجا میتوان پس از پایان تایمر 1 اعمال مورد نیاز را اجرا کرد.
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-
+                canCheckSwitch = false;
+                HelperSharedPreferences.SaveBoolean("sw_1_status", false);
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);
                 tvTimerHour1.setText("00:00:00");
                 tvTimerHourCountDown1.setText("00:00:00");
                 HelperSharedPreferences.SaveString("timer1_end", "0");
@@ -490,7 +563,15 @@ public class MainActivity extends AppCompatActivity {
             case 2:
                 //اینجا میتوان پس از پایان تایمر 2 اعمال مورد نیاز را اجرا کرد.
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-
+                canCheckSwitch = false;
+                HelperSharedPreferences.SaveBoolean("sw_2_status", false);
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);
                 tvTimerHour2.setText("00:00:00");
                 tvTimerHourCountDown2.setText("00:00:00");
                 HelperSharedPreferences.SaveString("timer2_end", "0");
@@ -498,7 +579,15 @@ public class MainActivity extends AppCompatActivity {
             case 3:
                 //اینجا میتوان پس از پایان تایمر 3 اعمال مورد نیاز را اجرا کرد.
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
-
+                canCheckSwitch = false;
+                HelperSharedPreferences.SaveBoolean("sw_3_status", false);
+                setSwitchStatus();
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        canCheckSwitch = true;
+                    }
+                }, 500);
                 tvTimerHour3.setText("00:00:00");
                 tvTimerHourCountDown3.setText("00:00:00");
                 HelperSharedPreferences.SaveString("timer3_end", "0");
