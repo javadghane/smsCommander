@@ -266,7 +266,8 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    //todo here
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -471,7 +472,7 @@ public class MainActivity extends AppCompatActivity {
                     HelperSharedPreferences.SaveBoolean("sw_1_status", false);
                     HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
-                setSwitchStatus();
+                loadData();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -495,7 +496,7 @@ public class MainActivity extends AppCompatActivity {
                     HelperSharedPreferences.SaveBoolean("sw_2_status", false);
                     HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
-                setSwitchStatus();
+                loadData();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -520,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
                     HelperSharedPreferences.SaveBoolean("sw_3_status", false);
                     HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
-                setSwitchStatus();
+                loadData();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
