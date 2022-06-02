@@ -186,7 +186,8 @@ public class MainActivity extends AppCompatActivity {
                 .setIcon(android.R.drawable.ic_lock_idle_charging)
 
 
-                .setPositiveButton("به لى", (dialog, whichButton) -> {
+                .setPositiveButton("به لى", (dialog, whichButton) ->
+                {
 
                     //ذخیره سازی وضعیت سویچ
                     //HelperSharedPreferences.SaveBoolean("sw_" + switchNumber + "_status", isChecked);
@@ -265,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
 
-                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -377,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
         boolean device1Status = HelperSharedPreferences.LoadBoolean("device_1", false);
         boolean device2Status = HelperSharedPreferences.LoadBoolean("device_2", false);
         boolean device3Status = HelperSharedPreferences.LoadBoolean("device_3", false);
-
+        //  boolean device5Status = HelperSharedPreferences.LoadBoolean("device_5", false);
         if (device1Status)
             Glide.with(this).asGif().load(R.drawable.on_anim).into(img1);
         else
@@ -392,6 +393,12 @@ public class MainActivity extends AppCompatActivity {
             Glide.with(this).asGif().load(R.drawable.on_anim).into(img3);
         else
             Glide.with(this).asGif().load(R.drawable.off_anim).into(img3);
+
+        //  if (device5Status)
+        //      Glide.with(this).asGif().load(R.drawable.on_anim).into(img1);
+        //   else
+        //      Glide.with(this).asGif().load(R.drawable.off_anim).into(img1);
+
 
         setSwitchStatus();
 
@@ -417,18 +424,52 @@ public class MainActivity extends AppCompatActivity {
     public void onNewDataReceived(EventBus_SMS eventBusSms) {
         //با دریافت پیام این متد کال میشود
         loadData();
+
+
+      /*  //if status == '000' status will be off
+        boolean deviceStatusBoolean = !(deviceStatus.equalsIgnoreCase("000"));
+        if (deviceId.equalsIgnoreCase("LTIME1"))
+        {
+            ///ali
+
+            HelperSharedPreferences.SaveBoolean("device_1", deviceStatusBoolean);
+            MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
+            mPlayer.start();
+
+        }
+        if (deviceId.equalsIgnoreCase("LTIME2"))
+        {
+            MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
+            mPlayer.start();
+            HelperSharedPreferences.SaveBoolean("device_2", deviceStatusBoolean);
+        }
+        if (deviceId.equalsIgnoreCase("LTIME3")) {
+            MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
+            mPlayer.start();
+            HelperSharedPreferences.SaveBoolean("device_3", deviceStatusBoolean);
+        }*/
+
+
         if (eventBusSms.message.toLowerCase(Locale.ROOT).contains("ltime")) { //ltime1#030
+
             String timerName = eventBusSms.message.split("#")[0];
             int timerValue = Integer.parseInt(eventBusSms.message.split("#")[1]);
-            if (timerName.equalsIgnoreCase("ltime1")) {
+            if (timerName.equalsIgnoreCase("LTIME1")) {
                 HelperSharedPreferences.SaveString("timer1_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+                HelperSharedPreferences.SaveString("sw_1_timer", timerValue + "");
+                setTvNumberStyle(edtTimer1);
+                setHourOfTimer(timerValue + "", tvTimerHour1);
+                checkingTimers();
 
                 //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
-              /*  canCheckSwitch = false;
-                if(timerValue>0){
+                canCheckSwitch = false;
+                if (timerValue > 0) {
+
                     HelperSharedPreferences.SaveBoolean("sw_1_status", true);
-                }else{
+                    HelperSharedPreferences.SaveBoolean("device_1", true);
+                } else {
                     HelperSharedPreferences.SaveBoolean("sw_1_status", false);
+                    HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
                 setSwitchStatus();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -436,16 +477,23 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);*/
+                }, 500);
 
-            } else if (timerName.equalsIgnoreCase("ltime2")) {
+            } else if (timerName.equalsIgnoreCase("LTIME2")) {
                 HelperSharedPreferences.SaveString("timer2_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+                HelperSharedPreferences.SaveString("sw_2_timer", timerValue + "");
+                setTvNumberStyle(edtTimer2);
+                setHourOfTimer(timerValue + "", tvTimerHour2);
+                checkingTimers();
                 //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
-              /*  canCheckSwitch = false;
-                if(timerValue>0){
+                canCheckSwitch = false;
+                if (timerValue > 0) {
+
                     HelperSharedPreferences.SaveBoolean("sw_2_status", true);
-                }else{
+                    HelperSharedPreferences.SaveBoolean("device_1", true);
+                } else {
                     HelperSharedPreferences.SaveBoolean("sw_2_status", false);
+                    HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
                 setSwitchStatus();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -453,16 +501,24 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);*/
-            } else if (timerName.equalsIgnoreCase("ltime3")) {
+                }, 500);
+            } else if (timerName.equalsIgnoreCase("LTIME3")) {
 
                 HelperSharedPreferences.SaveString("timer3_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
+                HelperSharedPreferences.SaveString("sw_3_timer", timerValue + "");
+                setTvNumberStyle(edtTimer3);
+                setHourOfTimer(timerValue + "", tvTimerHour3);
+                checkingTimers();
+
                 //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
-                 /*  canCheckSwitch = false;
-                if(timerValue>0){
+                canCheckSwitch = false;
+                if (timerValue > 0) {
+
                     HelperSharedPreferences.SaveBoolean("sw_3_status", true);
-                }else{
+                    HelperSharedPreferences.SaveBoolean("device_1", true);
+                } else {
                     HelperSharedPreferences.SaveBoolean("sw_3_status", false);
+                    HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
                 setSwitchStatus();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -470,7 +526,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);*/
+                }, 500);
             }
             checkingTimers();
         }
@@ -549,6 +605,7 @@ public class MainActivity extends AppCompatActivity {
                 //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
                 canCheckSwitch = false;
                 HelperSharedPreferences.SaveBoolean("sw_1_status", false);
+                Glide.with(this).asGif().load(R.drawable.off_anim).into(img1);
                 setSwitchStatus();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                     @Override
@@ -556,6 +613,7 @@ public class MainActivity extends AppCompatActivity {
                         canCheckSwitch = true;
                     }
                 }, 500);
+                Glide.with(this).asGif().load(R.drawable.off_anim).into(img1);
                 tvTimerHour1.setText("00:00:00");
                 tvTimerHourCountDown1.setText("00:00:00");
                 HelperSharedPreferences.SaveString("timer1_end", "0");
@@ -626,6 +684,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
     //for timer
     //Declare timer
     // CountDownTimer cTimer = null;
@@ -668,5 +728,7 @@ public class MainActivity extends AppCompatActivity {
         if (cTimer != null)
             cTimer.cancel();
     }*/
+
+
 }
 

@@ -18,6 +18,7 @@ import java.util.Map;
 public class MySmsReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsReceiver";
     public Integer Code = 0;
+    //public String txtsms = "";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -28,8 +29,27 @@ public class MySmsReceiver extends BroadcastReceiver {
             Log.e(TAG, "<" + phone + "> :\n" + msg + "\n");
             assert msg != null;
 
+////  function check sms is run
+
             //اگر پیام استاتوس بود باشد
-            if (msg.contains("status_") || msg.contains("Status_")) { //sample: status_1_on     status_3_off
+
+
+            if (msg.contains("LTIME")) {
+                String[] comList = msg.split("#");
+                ///  String com0 = comList[0];
+                String deviceId = comList[0];
+                String deviceStatus = comList[1];
+                EventBus_SMS sms = new EventBus_SMS();
+                sms.sender = phone;
+                sms.message = msg;
+                sms.extraDeviceName = deviceId;
+                sms.extraDeviceStatus = deviceStatus;
+
+
+                EventBus.getDefault().post(sms);
+            }
+
+            if (msg.contains("Status_") || msg.contains("status_")) { //sample: status_1_on     status_3_off
                 String[] commandList = msg.split("_");
                 String command = commandList[0];
                 String deviceId = commandList[1];
@@ -47,15 +67,22 @@ public class MySmsReceiver extends BroadcastReceiver {
                     HelperSharedPreferences.SaveBoolean("device_2", deviceStatusBoolean);
                 } else if (deviceId.equalsIgnoreCase("3")) {
                     HelperSharedPreferences.SaveBoolean("device_3", deviceStatusBoolean);
+                } else if (deviceId.equalsIgnoreCase("4")) {
+                    HelperSharedPreferences.SaveBoolean("eftTime", deviceStatusBoolean);
+                    ///
                 }
+
 
                 EventBus.getDefault().post(sms);
 
-            } else if (msg.contains("play")) {
-                //فایل موسیقی در پوشه
-                //res -> raw کپی شود
+
+            } else if (msg.contains("19") || msg.contains("COMEBACK")) {
+                //voice
+                //res -> rawfor vice file
                 MediaPlayer mPlayer = MediaPlayer.create(context, R.raw.car_alarm_1);
                 mPlayer.start();
+                ///
+                /////////////
             } else {
                 EventBus_SMS sms = new EventBus_SMS();
                 sms.sender = phone;
@@ -66,6 +93,7 @@ public class MySmsReceiver extends BroadcastReceiver {
                 EventBus.getDefault().post(sms);
             }
         }
+
     }
 
     private Map<String, String> getMessages(Intent intent) {
@@ -107,3 +135,4 @@ public class MySmsReceiver extends BroadcastReceiver {
 
 
 }
+
