@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
                     masterMobileNumber = edtphonNm.getText().toString();
 
                     //todo here
-                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
@@ -464,11 +464,12 @@ public class MainActivity extends AppCompatActivity {
                 //اگر میخواهید بعد از دریافت پیامک سویچ روشن شود کد زیر از کامنت بیاد بیرون  1917
                 canCheckSwitch = false;
                 if (timerValue > 0) {
-
                     HelperSharedPreferences.SaveBoolean("sw_1_status", true);
+                    sw1.setChecked(true);
                     HelperSharedPreferences.SaveBoolean("device_1", true);
                 } else {
                     HelperSharedPreferences.SaveBoolean("sw_1_status", false);
+                    sw1.setChecked(false);
                     HelperSharedPreferences.SaveBoolean("device_1", false);
                 }
                 loadData();
@@ -477,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);
+                }, 1000);
 
             } else if (timerName.equalsIgnoreCase("LTIME2")) {
                 HelperSharedPreferences.SaveString("timer2_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
@@ -490,10 +491,12 @@ public class MainActivity extends AppCompatActivity {
                 if (timerValue > 0) {
 
                     HelperSharedPreferences.SaveBoolean("sw_2_status", true);
-                    HelperSharedPreferences.SaveBoolean("device_1", true);
+                    sw2.setChecked(true);
+                    HelperSharedPreferences.SaveBoolean("device_2", true);
                 } else {
                     HelperSharedPreferences.SaveBoolean("sw_2_status", false);
-                    HelperSharedPreferences.SaveBoolean("device_1", false);
+                    sw2.setChecked(false);
+                    HelperSharedPreferences.SaveBoolean("device_2", false);
                 }
                 loadData();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -501,7 +504,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);
+                }, 1000);
             } else if (timerName.equalsIgnoreCase("LTIME3")) {
 
                 HelperSharedPreferences.SaveString("timer3_end", System.currentTimeMillis() + (timerValue * 60 * 1000) + "");
@@ -515,10 +518,12 @@ public class MainActivity extends AppCompatActivity {
                 if (timerValue > 0) {
 
                     HelperSharedPreferences.SaveBoolean("sw_3_status", true);
-                    HelperSharedPreferences.SaveBoolean("device_1", true);
+                    sw3.setChecked(true);
+                    HelperSharedPreferences.SaveBoolean("device_3", true);
                 } else {
                     HelperSharedPreferences.SaveBoolean("sw_3_status", false);
-                    HelperSharedPreferences.SaveBoolean("device_1", false);
+                    sw3.setChecked(false);
+                    HelperSharedPreferences.SaveBoolean("device_3", false);
                 }
                 loadData();
                 new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -526,7 +531,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         canCheckSwitch = true;
                     }
-                }, 500);
+                }, 1000);
             }
             checkingTimers();
         }
