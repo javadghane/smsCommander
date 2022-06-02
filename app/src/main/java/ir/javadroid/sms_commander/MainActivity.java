@@ -265,9 +265,8 @@ public class MainActivity extends AppCompatActivity {
                     //  smsMessage = "R" + switchNumber +  status + timer; // sample: change_1_start_75
                     masterMobileNumber = edtphonNm.getText().toString();
 
-
                     //todo here
-                    //SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
+                    SmsSender.startSmsSender(getApplicationContext(), masterMobileNumber, smsMessage);
 
 
                     checkingTimers();
